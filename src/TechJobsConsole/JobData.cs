@@ -9,6 +9,7 @@ namespace TechJobsConsole
     {
         static List<Dictionary<string, string>> AllJobs = new List<Dictionary<string, string>>();
         static bool IsDataLoaded = false;
+        private static object aValue;
 
         public static List<Dictionary<string, string>> FindAll()
         {
@@ -38,20 +39,65 @@ namespace TechJobsConsole
             return values;
         }
 
+
+
+
+        //Create Method FindByValue
+
+        public static List<Dictionary<string,string>> FindByValue(string value)
+        {
+            LoadData();
+            List<Dictionary<string, string>> jobs = new List<Dictionary<string, string>>();
+                foreach (Dictionary<string,string> row in AllJobs)
+            {
+                foreach (KeyValuePair<string, string> unit in row)
+                {
+                    if(unit.Value.ToLower().Contains(value.ToLower()))
+                    {
+                        if (!jobs.Contains(row))
+                            jobs.Add(row);
+                    }
+
+                }
+            }
+            return jobs;
+        }
+
+
+
+
+
         public static List<Dictionary<string, string>> FindByColumnAndValue(string column, string value)
         {
             // load data, if not already loaded
             LoadData();
 
             List<Dictionary<string, string>> jobs = new List<Dictionary<string, string>>();
-
-            foreach (Dictionary<string, string> row in AllJobs)
+            if (column == "all")
             {
-                string aValue = row[column];
 
-                if (aValue.Contains(value))
+                foreach (Dictionary<string, string> row in AllJobs)
+
                 {
-                    jobs.Add(row);
+                    foreach (KeyValuePair<string, string> unit in row)
+                    {
+                        if (unit.Value.ToLower().Contains(value.ToLower()))
+                        {
+                            string aValue = row[column];
+                        }
+                    }
+                }
+            }
+            else
+            {
+                foreach (Dictionary<string, string> row in AllJobs)
+                {
+                    string aValue = row[column];
+
+                    if (aValue.ToLower().Contains(value.ToLower()))
+                    {
+                        jobs.Add(row);
+                    }
                 }
             }
 
